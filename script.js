@@ -60,15 +60,25 @@ function renderQuestions() {
       input.value = choice;
 
       // Restore saved choice
-      if (userAnswers[i] === choice) {
-        input.checked = true;
-      }
+if (userAnswers[i] === choice) {
+  input.checked = true;
+  input.setAttribute("checked", "true");   // ✅ Add this
+}
 
-      // Update progress in sessionStorage when selected
-      input.addEventListener("change", () => {
-        userAnswers[i] = choice;
-        sessionStorage.setItem("progress", JSON.stringify(userAnswers));
-      });
+// Update progress in sessionStorage when selected
+input.addEventListener("change", () => {
+  userAnswers[i] = choice;
+  sessionStorage.setItem("progress", JSON.stringify(userAnswers));
+
+  // Remove `checked="true"` from all radios in the same group
+  document.querySelectorAll(`[name="${input.name}"]`).forEach((radio) =>
+    radio.removeAttribute("checked")
+  );
+
+  // Add `checked="true"` to the newly selected one
+  input.setAttribute("checked", "true");   // ✅ Add this
+});
+
 
       label.appendChild(input);
       label.appendChild(document.createTextNode(choice));
